@@ -1,0 +1,254 @@
+" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker spell:
+"
+"                    __ _ _____              _
+"         ___ _ __  / _/ |___ /      __   __(_)_ __ ___
+"        / __| '_ \| |_| | |_ \ _____\ \ / /| | '_ ` _ \
+"        \__ \ |_) |  _| |___) |_____|\ V / | | | | | | |
+"        |___/ .__/|_| |_|____/        \_/  |_|_| |_| |_|
+"            |_|
+"
+"   This is the personal .vimrc.bundles file of Steve Francia.
+"   While much of it is beneficial for general use, I would
+"   recommend picking out the parts you want and understand.
+"
+"   This file imports the various plugins of spf13. If you
+"   wish to alter which groups are imported, see vimrc.before.
+"   If you wish to add or remove individual bundles, create
+"   ~/.vimrc.bundles.local and `Bundle` or `UnBundle` as needed
+"   from there.
+"
+"   You can find me at http://spf13.com
+" }
+
+" Environment {
+
+    " Basics {
+        set nocompatible        " Must be first line
+        set background=dark     " Assume a dark background
+        set t_Co=256
+        set noswapfile
+    " }
+
+    " Windows Compatible {
+        " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
+        " across (heterogeneous) systems easier.
+        if has('win32') || has('win64')
+          set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+
+          " Be nice and check for multi_byte even if the config requires
+          " multi_byte support most of the time
+          if has("multi_byte")
+            " Windows cmd.exe still uses cp850. If Windows ever moved to
+            " Powershell as the primary terminal, this would be utf-8
+            set termencoding=cp850
+            " Let Vim use utf-8 internally, because many scripts require this
+            set encoding=utf-8
+            setglobal fileencoding=utf-8
+            " Windows has traditionally used cp1252, so it's probably wise to
+            " fallback into cp1252 instead of eg. iso-8859-15.
+            " Newer Windows files might contain utf-8 or utf-16 LE so we might
+            " want to try them first.
+            set fileencodings=ucs-bom,utf-8,utf-16le,cp1252,iso-8859-15
+          endif
+        endif
+    " }
+
+    " Setup neoBundle Support {
+        " The next three lines ensure that the ~/.vim/bundle/ system works
+        filetype off
+        set runtimepath+=~/.vim/bundle/neobundle.vim/
+        call neobundle#rc(expand('~/.vim/bundle/'))
+        call neobundle#begin(expand('~/.vim/bundle/'))
+        NeoBundleFetch 'https://github.com/Shougo/neobundle.vim'
+    " }
+" }
+
+" Bundles {
+
+    " Deps {
+        NeoBundle 'https://github.com/Shougo/neobundle'
+        "NeoBundle 'https://github.com/gmarik/vundle'
+        NeoBundle 'https://github.com/MarcWeber/vim-addon-mw-utils'
+        "NeoBundle 'https://github.com/tomtom/tlib_vim'
+        "if executable('ag')
+        "    NeoBundle 'https://github.com/mileszs/ack.vim'
+        "    let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
+        "elseif executable('ack-grep')
+        "    let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+        "    NeoBundle 'https://github.com/mileszs/ack.vim'
+        "elseif executable('ack')
+        "    NeoBundle 'https://github.com/mileszs/ack.vim'
+        "endif
+    " }
+
+    " In your .vimrc.before.local file
+    " list only the plugin groups you will use
+    if !exists('g:spf13_bundle_groups')
+        let g:spf13_bundle_groups=['general', 'programming', 'python', 'youcompleteme', 'html', 'misc',]
+        "let g:spf13_bundle_groups=['general', 'writing', 'neocomplcache', 'programming', 'php', 'ruby', 'python', 'twig', 'javascript', 'html', 'misc',]
+    endif
+
+    " To override all the included bundles, add the following to your
+    " .vimrc.bundles.local file:
+    "   let g:override_spf13_bundles = 1
+    if !exists("g:override_spf13_bundles")
+
+    " General {
+        if count(g:spf13_bundle_groups, 'general')
+            NeoBundle 'https://github.com/scrooloose/nerdtree'
+            NeoBundle 'https://github.com/altercation/vim-colors-solarized'
+            "NeoBundle 'https://github.com/spf13/vim-colors'
+            NeoBundle 'https://github.com/tpope/vim-surround'
+            "NeoBundle 'https://github.com/spf13/vim-autoclose'
+            NeoBundle 'https://github.com/kien/ctrlp.vim'
+            NeoBundle 'https://github.com/terryma/vim-multiple-cursors'
+            "NeoBundle 'https://github.com/vim-scripts/sessionman.vim'
+            "NeoBundle 'https://github.com/matchit.zip'
+            "if (has("python") || has("python3")) && exists('g:spf13_use_powerline') && !exists('g:spf13_use_old_powerline')
+            "    NeoBundle 'https://github.com/Lokaltog/powerline', {'rtp':'/powerline/bindings/vim'}
+            "elseif exists('g:spf13_use_powerline') && exists('g:spf13_use_old_powerline')
+            "    NeoBundle 'https://github.com/Lokaltog/vim-powerline'
+            "else
+            "    NeoBundle 'https://github.com/bling/vim-airline'
+            "endif
+            NeoBundle 'https://github.com/bling/vim-airline'
+            NeoBundle 'https://github.com/bling/vim-bufferline'
+            "NeoBundle 'https://github.com/Lokaltog/vim-easymotion'
+            "NeoBundle 'https://github.com/godlygeek/csapprox'
+            NeoBundle 'https://github.com/jistr/vim-nerdtree-tabs'
+            NeoBundle 'https://github.com/flazz/vim-colorschemes'
+            "NeoBundle 'https://github.com/mbbill/undotree'
+            "NeoBundle 'https://github.com/nathanaelkane/vim-indent-guides'
+            "if !exists('g:spf13_no_views')
+            "    NeoBundle 'https://github.com/vim-scripts/restore_view.vim'
+            "endif
+            "NeoBundle 'https://github.com/mhinz/vim-signify'
+            "NeoBundle 'https://github.com/tpope/vim-abolish.git'
+            "NeoBundle 'https://github.com/osyo-manga/vim-over'
+            "NeoBundle 'https://github.com/justinmk/vim-sneak'
+            "NeoBundle 'https://github.com/kana/vim-textobj-user'
+            "NeoBundle 'https://github.com/kana/vim-textobj-indent'
+        endif
+    " }
+
+    " Writing {
+        if count(g:spf13_bundle_groups, 'writing')
+            NeoBundle 'https://github.com/reedes/vim-litecorrect'
+            NeoBundle 'https://github.com/reedes/vim-textobj-sentence'
+            NeoBundle 'https://github.com/reedes/vim-textobj-quote'
+            NeoBundle 'https://github.com/reedes/vim-wordy'
+        endif
+    " }
+
+    " General Programming {
+        if count(g:spf13_bundle_groups, 'programming')
+            " Pick one of the checksyntax, jslint, or syntastic
+            NeoBundle 'https://github.com/scrooloose/syntastic'
+            NeoBundle 'https://github.com/tpope/vim-fugitive'
+            "NeoBundle 'https://github.com/mattn/webapi-vim'
+            "NeoBundle 'https://github.com/mattn/gist-vim'
+            NeoBundle 'https://github.com/scrooloose/nerdcommenter'
+            NeoBundle 'https://github.com/godlygeek/tabular'
+            NeoBundle 'https://github.com/Mizuchi/STL-Syntax'
+            NeoBundle 'https://github.com/davidhalter/jedi-vim'
+            NeoBundle 'https://github.com/lekv/vim-clewn'
+            if executable('ctags')
+                NeoBundle 'https://github.com/majutsushi/tagbar'
+            endif
+        endif
+    " }
+
+    " Snippets & AutoComplete {
+        if count(g:spf13_bundle_groups, 'youcompleteme')
+            NeoBundle 'https://github.com/Valloric/YouCompleteMe'
+            NeoBundle 'https://github.com/SirVer/ultisnips'
+            NeoBundle 'https://github.com/honza/vim-snippets'
+        endif
+    " }
+
+    " PHP {
+        if count(g:spf13_bundle_groups, 'php')
+            NeoBundle 'https://github.com/spf13/PIV'
+            NeoBundle 'https://github.com/arnaud-lb/vim-php-namespace'
+        endif
+    " }
+
+    " Python {
+        if count(g:spf13_bundle_groups, 'python')
+            " Pick either python-mode or pyflakes & pydoc
+            "NeoBundle 'https://github.com/klen/python-mode'
+            NeoBundle 'https://github.com/davidhalter/jedi-vim'
+            NeoBundle 'https://github.com/python.vim'
+            NeoBundle 'https://github.com/python_match.vim'
+            NeoBundle 'https://github.com/pythoncomplete'
+        endif
+    " }
+
+    " Javascript {
+        if count(g:spf13_bundle_groups, 'javascript')
+            NeoBundle 'https://github.com/elzr/vim-json'
+            NeoBundle 'https://github.com/groenewege/vim-less'
+            NeoBundle 'https://github.com/pangloss/vim-javascript'
+            NeoBundle 'https://github.com/briancollins/vim-jst'
+            NeoBundle 'https://github.com/kchmck/vim-coffee-script'
+        endif
+    " }
+
+    " Scala {
+        if count(g:spf13_bundle_groups, 'scala')
+            NeoBundle 'https://github.com/derekwyatt/vim-scala'
+            NeoBundle 'https://github.com/derekwyatt/vim-sbt'
+        endif
+    " }
+
+    " HTML {
+        if count(g:spf13_bundle_groups, 'html')
+            NeoBundle 'https://github.com/amirh/HTML-AutoCloseTag'
+            NeoBundle 'https://github.com/hail2u/vim-css3-syntax'
+            NeoBundle 'https://github.com/gorodinskiy/vim-coloresque'
+            NeoBundle 'https://github.com/tpope/vim-haml'
+        endif
+    " }
+
+    " Ruby {
+        if count(g:spf13_bundle_groups, 'ruby')
+            NeoBundle 'https://github.com/tpope/vim-rails'
+            let g:rubycomplete_buffer_loading = 1
+            "let g:rubycomplete_classes_in_global = 1
+            "let g:rubycomplete_rails = 1
+        endif
+    " }
+
+    " Misc {
+        if count(g:spf13_bundle_groups, 'misc')
+            NeoBundle 'https://github.com/sjl/gundo.vim.git'
+            "NeoBundle 'https://github.com/tpope/vim-markdown'
+            "NeoBundle 'https://github.com/spf13/vim-preview'
+            "NeoBundle 'https://github.com/tpope/vim-cucumber'
+            "NeoBundle 'https://github.com/quentindecock/vim-cucumber-align-pipes'
+            "NeoBundle 'https://github.com/Puppet-Syntax-Highlighting'
+        endif
+    " }
+
+    " Twig {
+        if count(g:spf13_bundle_groups, 'twig')
+            NeoBundle 'https://github.com/beyondwords/vim-twig'
+        endif
+    " }
+
+    endif
+call neobundle#end()
+" }
+
+" Use fork bundles config if available {
+    if filereadable(expand("~/.vimrc.bundles.fork"))
+        source ~/.vimrc.bundles.fork
+    endif
+" }
+
+" Use local bundles config if available {
+    if filereadable(expand("~/.vimrc.bundles.local"))
+        source ~/.vimrc.bundles.local
+    endif
+" }
